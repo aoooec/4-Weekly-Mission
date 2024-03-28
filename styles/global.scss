@@ -1,0 +1,16 @@
+@import "@/styles/_reset.scss";
+@import "@/styles/_variables.scss";
+@import "@/styles/_mixins.scss";
+
+@font-face {
+  font-family: "Pretendard Variable";
+  font-style: normal;
+  src: url("../public/fonts/PretendardVariable.woff2") format("woff2");
+}
+
+body {
+  background-color: $primary;
+  font-family: "Pretendard Variable";
+  -webkit-font-smoothing: antialiased;
+  @include font();
+}
