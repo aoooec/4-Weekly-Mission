@@ -24,4 +24,23 @@ $g-linkbrary: linear-gradient(91deg, #6d6afe 0.12%, #6ae3fe 101.84%);
 /* font-weight*/
 $bold: 700;
 $semibold: 600;
+$medium: 500;
 $regular: 400;
+
+/* font-size */
+$font-14: 0.875rem;
+$font-16: 1rem;
+$font-18: 1.125rem;
+$font-24: 1.5rem;
+$font-32: 2rem;
+$font-40: 2.5rem;
+$font-48: 3rem;
+$font-64: 4rem;
+
+/* breakpoint */
+$breakpoint-mobile: 375px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1200px;
+
+/* z-index */
+$zindex-nav: 1;
