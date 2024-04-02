@@ -1,0 +1,61 @@
+@import "@/styles/_variables.scss";
+@import "@/styles/_mixins.scss";
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+
+  .buttonList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 8px;
+  }
+
+  .addBtn {
+    position: fixed;
+    left: 50%;
+    bottom: 101px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    padding: 8px 24px;
+    background-color: $primary;
+    @include border($white, 1px, 20px);
+
+    @include tablet {
+      position: static;
+      z-index: 0;
+      left: 0;
+      bottom: 0;
+      transform: translateX(0);
+      background-color: transparent;
+      padding: 8px 0;
+    }
+
+    .text {
+      @include font($font-16, $medium);
+      line-height: 1.2;
+      color: $white;
+
+      @include tablet {
+        color: $primary;
+      }
+    }
+
+    svg {
+      fill: $white;
+      width: 16px;
+      height: 16px;
+      margin-top: -1px;
+
+      @include tablet {
+        fill: $primary;
+      }
+    }
+  }
+}
