@@ -1,0 +1,53 @@
+@import "@/styles/_variables.scss";
+@import "@/styles/_mixins.scss";
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  border-radius: 10px;
+  background-color: $text-gray-10;
+  padding: 13px 16px;
+
+  @include tablet {
+    gap: 10px;
+    padding: 15px 16px;
+  }
+
+  .searchInput {
+    flex-grow: 1;
+    background-color: transparent;
+    font-size: $font-14;
+
+    &::placeholder {
+      color: $text-normal;
+    }
+
+    @include tablet {
+      font-size: $font-16;
+      line-height: 1.5;
+    }
+  }
+
+  .searchIcon {
+    width: 16px;
+    height: 16px;
+    stroke: $text-normal;
+
+    &.isChange {
+      stroke: $primary;
+    }
+  }
+
+  .closeBtn,
+  .closeIcon {
+    width: 16px;
+    height: 16px;
+
+    @include tablet {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}

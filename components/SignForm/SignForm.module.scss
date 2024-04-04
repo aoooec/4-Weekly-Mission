@@ -1,0 +1,23 @@
+@import "@/styles/_variables.scss";
+@import "@/styles/_mixins.scss";
+
+.formItem {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .inputContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .label {
+      font-size: $font-14;
+    }
+
+    .error {
+      color: $red;
+      font-size: $font-14;
+    }
+  }
+}
