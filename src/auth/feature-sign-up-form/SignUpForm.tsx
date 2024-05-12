@@ -16,8 +16,10 @@ export const SignUpForm = () => {
     mode: "onBlur",
     reValidateMode: "onBlur",
   });
-  const { execute: checkEmailDuplicate } = useCheckEmailDuplicate(watch("email"));
-  const { execute: signUp, data } = useSignUp({
+  const { execute: checkEmailDuplicate } = useCheckEmailDuplicate(
+    watch("email")
+  );
+  const { mutate: signUp, data } = useSignUp({
     email: watch("email"),
     password: watch("password"),
   });
@@ -25,7 +27,7 @@ export const SignUpForm = () => {
   useTokenRedirect(data?.data.accessToken);
 
   return (
-    <form className={cx("form")} onSubmit={handleSubmit(signUp)}>
+    <form className={cx("form")} onSubmit={handleSubmit(() => signUp())}>
       <div className={cx("input-box")}>
         <label className={cx("label")}>이메일</label>
         <Controller
@@ -33,11 +35,14 @@ export const SignUpForm = () => {
           name="email"
           rules={{
             required: ERROR_MESSAGE.emailRequired,
-            pattern: { value: /\S+@\S+\.\S+/, message: ERROR_MESSAGE.emailInvalid },
+            pattern: {
+              value: /\S+@\S+\.\S+/,
+              message: ERROR_MESSAGE.emailInvalid,
+            },
             validate: {
               alreadyExist: async () => {
                 const response = await checkEmailDuplicate();
-                if (!response?.data?.data.isUsableNickname) {
+                if (!response?.data?.isUsableEmail) {
                   return ERROR_MESSAGE.emailAlreadyExist;
                 }
                 return true;
