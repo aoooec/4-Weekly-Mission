@@ -1,22 +1,31 @@
-import { axiosInstance, useAsync } from "@/src/sharing/util";
+import { axiosInstance } from "@/src/sharing/util";
+import { useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useCallback } from "react";
+
+type EmailDuplicateCheckResponse = { isUsableEmail: boolean };
 
 export const useCheckEmailDuplicate = (email: string) => {
   const checkEmailDuplicate = useCallback(
     () =>
-      axiosInstance.post<{ data: { isUsableNickname: boolean } }>("check-email", {
+      axiosInstance.post<EmailDuplicateCheckResponse>("users/check-email", {
         email,
       }),
     [email]
   );
-  const { execute, loading, error, data } = useAsync({
-    asyncFunction: checkEmailDuplicate,
-    lazyMode: true,
+  const { refetch, isLoading, error, data } = useQuery<
+    { data: EmailDuplicateCheckResponse },
+    AxiosError
+  >({
+    queryKey: ["check-email"],
+    queryFn: checkEmailDuplicate,
+    enabled: false,
+    retry: false,
   });
 
   return {
-    execute,
-    loading,
+    refetch,
+    isLoading,
     error,
     data,
   };

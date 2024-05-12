@@ -16,7 +16,7 @@ export const SignUpForm = () => {
     mode: "onBlur",
     reValidateMode: "onBlur",
   });
-  const { execute: checkEmailDuplicate } = useCheckEmailDuplicate(
+  const { refetch: checkEmailDuplicate } = useCheckEmailDuplicate(
     watch("email")
   );
   const { mutate: signUp, data } = useSignUp({
@@ -42,7 +42,7 @@ export const SignUpForm = () => {
             validate: {
               alreadyExist: async () => {
                 const response = await checkEmailDuplicate();
-                if (!response?.data?.isUsableEmail) {
+                if (!response?.data?.data?.isUsableEmail) {
                   return ERROR_MESSAGE.emailAlreadyExist;
                 }
                 return true;
