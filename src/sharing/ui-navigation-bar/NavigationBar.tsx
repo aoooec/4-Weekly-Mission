@@ -27,7 +27,7 @@ export const NavigationBar = ({ profile, isSticky }: NavigationBarProps) => {
             alt="Linkbrary 서비스 로고"
           />
         </Link>
-        {profile ? (
+        {profile?.email ? (
           <Profile profile={profile} />
         ) : (
           <a href={ROUTE.로그인}>
