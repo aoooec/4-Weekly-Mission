@@ -21,7 +21,11 @@ export const NavigationBar = ({ profile, isSticky }: NavigationBarProps) => {
     <nav className={cx("container", { sticky: isSticky })}>
       <div className={cx("items")}>
         <Link href={ROUTE.랜딩}>
-          <img className={cx("logo")} src={LOGO_IMAGE} alt="Linkbrary 서비스 로고" />
+          <img
+            className={cx("logo")}
+            src={LOGO_IMAGE}
+            alt="Linkbrary 서비스 로고"
+          />
         </Link>
         {profile ? (
           <Profile profile={profile} />

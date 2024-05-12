@@ -1,10 +1,17 @@
-import { axiosInstance, useAsync } from "@/src/sharing/util";
+import { axiosInstance } from "@/src/sharing/util";
 import { FolderRawData } from "../type";
 import { DEFAULT_FOLDER } from "./constant";
+import { useQuery } from "@tanstack/react-query";
 
 export const useGetFolder = (folderId: string) => {
-  const getFolder = () => axiosInstance.get<{ data: FolderRawData[] }>(`folders/${folderId}`);
-  const { loading, error, data } = useAsync({ asyncFunction: getFolder, enabled: !!folderId });
+  const getFolder = () =>
+    axiosInstance.get<FolderRawData[]>(`folders/${folderId}`);
+
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["folders", folderId],
+    queryFn: getFolder,
+    enabled: !!folderId,
+  });
   const folderDataResponse = data?.data?.[0];
 
   const folderData = folderDataResponse
@@ -16,5 +23,5 @@ export const useGetFolder = (folderId: string) => {
       }
     : DEFAULT_FOLDER;
 
-  return { loading, error, data: folderData };
+  return { isLoading, error, data: folderData };
 };

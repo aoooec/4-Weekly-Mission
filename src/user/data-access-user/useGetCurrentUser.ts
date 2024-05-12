@@ -1,7 +1,8 @@
-import { axiosInstance, useAsync, useEffectOnce } from "@/src/sharing/util";
+import { axiosInstance, useEffectOnce } from "@/src/sharing/util";
+import { DEFAULT_USER } from "./constant";
+import { useQuery } from "@tanstack/react-query";
 import { UserRawData } from "../type";
 import { useState } from "react";
-import { DEFAULT_USER } from "./constant";
 
 export const useGetCurrentUser = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -9,10 +10,11 @@ export const useGetCurrentUser = () => {
     setAccessToken(localStorage.getItem("accessToken"));
   });
 
-  const getCurrentUser = () => axiosInstance.get<{ data: UserRawData[] }>("users");
+  const getCurrentUser = () => axiosInstance.get<UserRawData[]>("users");
 
-  const { loading, error, data } = useAsync({
-    asyncFunction: getCurrentUser,
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["currentUser"],
+    queryFn: getCurrentUser,
     enabled: !!accessToken,
   });
 
@@ -26,5 +28,5 @@ export const useGetCurrentUser = () => {
       }
     : DEFAULT_USER;
 
-  return { loading, error, data: userData };
+  return { isLoading, error, data: userData };
 };

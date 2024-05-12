@@ -1,14 +1,18 @@
 import { FolderRawData } from "@/src/folder/type";
 import { mapFoldersData } from "@/src/folder/util-map";
 import { axiosInstance } from "@/src/sharing/util";
-import { useAsync } from "@/src/sharing/util";
+import { useQuery } from "@tanstack/react-query";
 
 export const useGetFolders = () => {
-  const getFolders = () => axiosInstance.get<{ data: { folder: FolderRawData[] } }>("folders");
-  const { loading, error, data } = useAsync({ asyncFunction: getFolders });
+  const getFolders = () => axiosInstance.get<FolderRawData[]>("folders");
 
-  const folders = mapFoldersData(data?.data?.folder);
+  const { refetch, isLoading, error, data } = useQuery({
+    queryKey: ["folders"],
+    queryFn: getFolders,
+  });
+
+  const folders = mapFoldersData(data?.data ?? []);
   const sortedFolders = folders.sort((a, b) => a?.id - b?.id);
 
-  return { loading, error, data: sortedFolders };
+  return { refetch, isLoading, error, data: sortedFolders };
 };

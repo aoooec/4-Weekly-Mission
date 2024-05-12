@@ -1,12 +1,16 @@
-import { useAsync } from "@/src/sharing/util";
 import { axiosInstance } from "@/src/sharing/util";
-import { UserRawData } from "@/src/user/type";
 import { DEFAULT_USER } from "./constant";
+import { UserRawData } from "@/src/user/type";
+import { useQuery } from "@tanstack/react-query";
 
 export const useGetUser = (userId?: number) => {
   const getUser = () =>
-    axiosInstance.get<{ data: UserRawData[] }>(`users${userId ? `/${userId}` : ""}`);
-  const { loading, error, data } = useAsync({ asyncFunction: getUser, enabled: !!userId });
+    axiosInstance.get<UserRawData[]>(`users${userId ? `/${userId}` : ""}`);
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["user"],
+    queryFn: getUser,
+    enabled: !!userId,
+  });
 
   const userDataResponse = data?.data?.[0];
   const userData = userDataResponse
@@ -18,5 +22,5 @@ export const useGetUser = (userId?: number) => {
       }
     : DEFAULT_USER;
 
-  return { loading, error, data: userData };
+  return { isLoading, error, data: userData };
 };
