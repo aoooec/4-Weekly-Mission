@@ -16,7 +16,7 @@ export const SignInForm = () => {
     defaultValues: { email: "", password: "" },
     mode: "onBlur",
   });
-  const { execute, data, error } = useSignIn({
+  const { mutate, data, error } = useSignIn({
     email: watch("email"),
     password: watch("password"),
   });
@@ -26,12 +26,15 @@ export const SignInForm = () => {
   useEffect(() => {
     if (error) {
       setError("email", { type: "invalid", message: ERROR_MESSAGE.emailCheck });
-      setError("password", { type: "invalid", message: ERROR_MESSAGE.passwordCheck });
+      setError("password", {
+        type: "invalid",
+        message: ERROR_MESSAGE.passwordCheck,
+      });
     }
   }, [error, setError]);
 
   return (
-    <form className={cx("form")} onSubmit={handleSubmit(execute)}>
+    <form className={cx("form")} onSubmit={handleSubmit(() => mutate())}>
       <div className={cx("input-box")}>
         <label className={cx("label")}>이메일</label>
         <Controller
@@ -39,7 +42,10 @@ export const SignInForm = () => {
           name="email"
           rules={{
             required: ERROR_MESSAGE.emailRequired,
-            pattern: { value: /\S+@\S+\.\S+/, message: ERROR_MESSAGE.emailInvalid },
+            pattern: {
+              value: /\S+@\S+\.\S+/,
+              message: ERROR_MESSAGE.emailInvalid,
+            },
           }}
           render={({ field, fieldState }) => (
             <Input

@@ -1,19 +1,24 @@
-import { axiosInstance, useAsync } from "@/src/sharing/util";
+import { axiosInstance } from "@/src/sharing/util";
 import { useCallback, useEffect } from "react";
 import { Token } from "../type";
+import { useMutation } from "@tanstack/react-query";
 
 type UseSignInParams = { email: string; password: string };
 
 export const useSignIn = ({ email, password }: UseSignInParams) => {
   const signIn = useCallback(
     () =>
-      axiosInstance.post<{ data: Token }>("sign-in", {
+      axiosInstance.post<Token>("auth/sign-in", {
         email,
         password,
       }),
     [email, password]
   );
-  const { execute, loading, error, data } = useAsync({ asyncFunction: signIn, lazyMode: true });
+  const { mutate, error, data } = useMutation({
+    mutationKey: ["sign-in"],
+    mutationFn: signIn,
+    retry: false,
+  });
   const accessToken = data?.data.accessToken;
 
   useEffect(() => {
@@ -23,8 +28,7 @@ export const useSignIn = ({ email, password }: UseSignInParams) => {
   }, [accessToken]);
 
   return {
-    execute,
-    loading,
+    mutate,
     error,
     data,
   };
