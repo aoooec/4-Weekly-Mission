@@ -25,12 +25,12 @@ const cx = classNames.bind(styles);
 
 type FolderToolBarProps = {
   folders: Folder[];
-  selectedFolderId?: SelectedFolderId;
+  currentFolderId?: SelectedFolderId;
 };
 
 export const FolderToolBar = ({
   folders,
-  selectedFolderId,
+  currentFolderId,
 }: FolderToolBarProps) => {
   const router = useRouter();
   const { shareKakao } = useKakaoSdk();
@@ -41,12 +41,12 @@ export const FolderToolBar = ({
   const { mutate: updateFolder } = useUpdateFolder();
 
   const folderName =
-    ALL_LINKS_ID === selectedFolderId
+    ALL_LINKS_ID === currentFolderId
       ? ALL_LINKS_TEXT
-      : folders?.find(({ id }) => id === selectedFolderId)?.name ?? "";
+      : folders?.find(({ id }) => id === currentFolderId)?.name ?? "";
 
   const getShareLink = () =>
-    `${window.location.origin}/shared?user=1&folder=${selectedFolderId}`;
+    `${window.location.origin}/shared?user=1&folder=${currentFolderId}`;
   const closeModal = () => setCurrentModal(null);
   const closeInputModal = () => {
     closeModal();
@@ -74,9 +74,9 @@ export const FolderToolBar = ({
   };
 
   const handleUpdateFolderClick = () => {
-    if (typeof selectedFolderId === "number") {
+    if (typeof currentFolderId === "number") {
       updateFolder(
-        { folderId: selectedFolderId, name: inputValue },
+        { folderId: currentFolderId, name: inputValue },
         {
           onSuccess: closeInputModal,
         }
@@ -85,8 +85,8 @@ export const FolderToolBar = ({
   };
 
   const handleDeleteFolderClick = () => {
-    if (typeof selectedFolderId === "number") {
-      deleteFolder(selectedFolderId, {
+    if (typeof currentFolderId === "number") {
+      deleteFolder(currentFolderId, {
         onSuccess: () => {
           closeModal();
           router.push(ROUTE.폴더);
@@ -102,14 +102,14 @@ export const FolderToolBar = ({
           key={ALL_LINKS_ID}
           text={ALL_LINKS_TEXT}
           href={ROUTE.폴더}
-          isSelected={ALL_LINKS_ID === selectedFolderId}
+          isSelected={ALL_LINKS_ID === currentFolderId}
         />
         {folders?.map(({ id, name }) => (
           <FolderButton
             key={id}
             text={name}
             href={`${ROUTE.폴더}/${id}`}
-            isSelected={id === selectedFolderId}
+            isSelected={id === currentFolderId}
           />
         ))}
       </div>
@@ -128,7 +128,7 @@ export const FolderToolBar = ({
         />
       </div>
       <h2 className={cx("folder-name")}>{folderName}</h2>
-      {selectedFolderId !== ALL_LINKS_ID && (
+      {currentFolderId !== ALL_LINKS_ID && (
         <div className={cx("buttons")}>
           {BUTTONS.map(({ text, iconSource, modalId }) => (
             <IconAndTextButton

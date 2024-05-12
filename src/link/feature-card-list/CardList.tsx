@@ -5,19 +5,28 @@ import { NoLink } from "@/src/link/ui-no-link";
 import { KeyboardEventHandler, useCallback, useRef, useState } from "react";
 import { CardList as UiCardList } from "@/src/link/ui-card-list";
 import { AlertModal } from "@/src/sharing/ui-alert-modal";
-import { MODALS_ID } from "./constant";
+import { DEFAULT_LINK, MODALS_ID } from "./constant";
 import { Link } from "@/src/link/type";
+import { useDeleteLink } from "../data-access-link/useDeleteLink";
+import { SelectedFolderId } from "@/src/folder/type";
+import { useAddLink } from "../data-access-link/useAddLink";
 
 type CardListProps = {
   links: Link[];
+  currentFolderId: SelectedFolderId;
 };
 
-export const CardList = ({ links }: CardListProps) => {
+export const CardList = ({ links, currentFolderId }: CardListProps) => {
   const { data: folders } = useGetFolders();
   const cardListRef = useRef(null);
   const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null);
   const [currentModal, setCurrentModal] = useState<string | null>(null);
-  const [selectedLinkUrl, setSelectedLinkUrl] = useState<string>("");
+  const [selectedLink, setSelectedLink] = useState<{
+    linkId: number;
+    url: string;
+  }>(DEFAULT_LINK);
+  const { mutate: deleteLink } = useDeleteLink(currentFolderId);
+  const { mutate: addLink } = useAddLink(currentFolderId);
 
   const closeModal = () => setCurrentModal(null);
   const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = (event) => {
@@ -43,6 +52,29 @@ export const CardList = ({ links }: CardListProps) => {
     [cardListRef]
   );
 
+  const handleDeleteLinkClick = () => {
+    deleteLink(selectedLink.linkId, {
+      onSuccess: () => {
+        closeModal();
+        setSelectedLink(DEFAULT_LINK);
+      },
+    });
+  };
+
+  const handleAddLinkClick = () => {
+    if (typeof selectedFolderId === "number") {
+      addLink(
+        { url: selectedLink.url, folderId: selectedFolderId },
+        {
+          onSuccess: () => {
+            closeModal();
+            setSelectedLink(DEFAULT_LINK);
+          },
+        }
+      );
+    }
+  };
+
   if (links.length === 0) return <NoLink />;
   return (
     <UiCardList ref={cardListRef}>
@@ -52,11 +84,11 @@ export const CardList = ({ links }: CardListProps) => {
           {...link}
           popoverPosition={getPopoverPosition(index)}
           onDeleteClick={() => {
-            setSelectedLinkUrl(link?.url ?? "");
+            setSelectedLink({ url: link?.url ?? "", linkId: link?.id ?? 0 });
             setCurrentModal(MODALS_ID.deleteLink);
           }}
           onAddToFolderClick={() => {
-            setSelectedLinkUrl(link?.url ?? "");
+            setSelectedLink({ url: link?.url ?? "", linkId: link?.id ?? 0 });
             setCurrentModal(MODALS_ID.addToFolder);
           }}
         />
@@ -64,19 +96,19 @@ export const CardList = ({ links }: CardListProps) => {
       <AlertModal
         isOpen={currentModal === MODALS_ID.deleteLink}
         title="링크 삭제"
-        description={selectedLinkUrl}
+        description={selectedLink.url}
         buttonText="삭제하기"
-        onClick={() => {}}
+        onClick={handleDeleteLinkClick}
         onCloseClick={closeModal}
         onKeyDown={handleKeyDown}
       />
       <AddLinkModal
         isOpen={currentModal === MODALS_ID.addToFolder}
         folders={folders}
-        description={selectedLinkUrl}
+        description={selectedLink.url}
         selectedFolderId={selectedFolderId}
         setSelectedFolderId={setSelectedFolderId}
-        onAddClick={() => {}}
+        onAddClick={handleAddLinkClick}
         onCloseClick={() => {
           setSelectedFolderId(null);
           closeModal();

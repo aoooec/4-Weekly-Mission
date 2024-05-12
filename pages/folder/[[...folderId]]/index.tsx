@@ -1,3 +1,4 @@
+import { useEffect, useMemo } from "react";
 import { useGetFolders } from "@/src/folder/data-access-folder";
 import { useGetLinks } from "@/src/link/data-access-link";
 import { Layout } from "@/src/sharing/feature-layout";
@@ -10,7 +11,6 @@ import { CardList } from "@/src/link/feature-card-list";
 import { useSearchLink } from "@/src/link/util-search-link";
 import { ROUTE, useIntersectionObserver } from "@/src/sharing/util";
 import { useRouter } from "next/router";
-import { useEffect, useMemo } from "react";
 
 const FolderPage = () => {
   const router = useRouter();
@@ -37,7 +37,12 @@ const FolderPage = () => {
   return (
     <Layout isSticky={false} footerRef={ref}>
       <FolderLayout
-        linkForm={<LinkForm hideFixedLinkForm={isIntersecting} />}
+        linkForm={
+          <LinkForm
+            hideFixedLinkForm={isIntersecting}
+            currentFolderId={currentFolderId}
+          />
+        }
         searchBar={
           <SearchBar
             value={searchValue}
@@ -46,9 +51,13 @@ const FolderPage = () => {
           />
         }
         folderToolBar={
-          <FolderToolBar folders={folders} selectedFolderId={currentFolderId} />
+          <FolderToolBar folders={folders} currentFolderId={currentFolderId} />
         }
-        cardList={isLoading ? null : <CardList links={result} />}
+        cardList={
+          isLoading ? null : (
+            <CardList links={result} currentFolderId={currentFolderId} />
+          )
+        }
       />
     </Layout>
   );
