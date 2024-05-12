@@ -16,9 +16,7 @@ export type FolderRawData = {
   created_at: string;
   name: string;
   user_id: number;
-  link?: {
-    count: number;
-  };
+  link_count?: number;
 };
 
 export type Folder = {
@@ -29,4 +27,4 @@ export type Folder = {
   linkCount: number;
 };
 
-export type SelectedFolderId = number | "all";
+export type SelectedFolderId = number | "all" | undefined;
