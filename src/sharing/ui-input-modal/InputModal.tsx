@@ -1,6 +1,10 @@
 import styles from "./InputModal.module.scss";
 import classNames from "classnames/bind";
-import { ChangeEventHandler, KeyboardEventHandler, MouseEventHandler } from "react";
+import {
+  ChangeEventHandler,
+  KeyboardEventHandler,
+  MouseEventHandler,
+} from "react";
 import { Input } from "@/src/sharing/ui-input";
 import { Modal } from "@/src/sharing/ui-modal";
 import { ModalContentBox } from "@/src/sharing/ui-modal-content-box";
@@ -14,6 +18,7 @@ type InputModalProps = {
   title: string;
   placeholder: string;
   buttonText: string;
+  onClick: MouseEventHandler<HTMLButtonElement>;
   onCloseClick: MouseEventHandler<HTMLDivElement | HTMLButtonElement>;
   onKeyDown: KeyboardEventHandler<HTMLDivElement>;
   value: string;
@@ -25,6 +30,7 @@ export const InputModal = ({
   title,
   placeholder,
   buttonText,
+  onClick,
   onCloseClick,
   onKeyDown,
   value,
@@ -36,8 +42,14 @@ export const InputModal = ({
         header={<ModalContentTitle>{title}</ModalContentTitle>}
         content={
           <div className={cx("modal-content")}>
-            <Input value={value} onChange={onChange} placeholder={placeholder} />
-            <ModalContentButton onClick={() => {}}>{buttonText}</ModalContentButton>
+            <Input
+              value={value}
+              onChange={onChange}
+              placeholder={placeholder}
+            />
+            <ModalContentButton onClick={onClick}>
+              {buttonText}
+            </ModalContentButton>
           </div>
         }
         onCloseClick={onCloseClick}

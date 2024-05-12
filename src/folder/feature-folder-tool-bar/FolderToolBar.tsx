@@ -3,7 +3,12 @@ import classNames from "classnames/bind";
 import { AddFolderButton } from "@/src/folder/ui-add-folder-button";
 import { FolderButton } from "@/src/folder/ui-folder-button";
 import { IconAndTextButton } from "@/src/sharing/ui-icon-and-text-button";
-import { ALL_LINKS_TEXT, BUTTONS, KAKAO_SHARE_DATA, MODALS_ID } from "./constant";
+import {
+  ALL_LINKS_TEXT,
+  BUTTONS,
+  KAKAO_SHARE_DATA,
+  MODALS_ID,
+} from "./constant";
 import { ALL_LINKS_ID } from "@/src/link/data-access-link/constant";
 import { KeyboardEvent, useState } from "react";
 import { ShareModal } from "@/src/folder/ui-share-modal";
@@ -11,6 +16,10 @@ import { InputModal } from "@/src/sharing/ui-input-modal";
 import { AlertModal } from "@/src/sharing/ui-alert-modal";
 import { Folder, SelectedFolderId } from "@/src/folder/type";
 import { ROUTE, copyToClipboard, useKakaoSdk } from "@/src/sharing/util";
+import { useAddFolder } from "../data-access-folder/useAddFolder";
+import { useRouter } from "next/router";
+import { useDeleteFolder } from "../data-access-folder/useDeleteFolder";
+import { useUpdateFolder } from "../data-access-folder/useUpdateFolder";
 
 const cx = classNames.bind(styles);
 
@@ -19,18 +28,30 @@ type FolderToolBarProps = {
   selectedFolderId?: SelectedFolderId;
 };
 
-export const FolderToolBar = ({ folders, selectedFolderId }: FolderToolBarProps) => {
+export const FolderToolBar = ({
+  folders,
+  selectedFolderId,
+}: FolderToolBarProps) => {
+  const router = useRouter();
   const { shareKakao } = useKakaoSdk();
   const [currentModal, setCurrentModal] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState<string>("");
+  const { mutate: addFolder } = useAddFolder();
+  const { mutate: deleteFolder } = useDeleteFolder();
+  const { mutate: updateFolder } = useUpdateFolder();
 
   const folderName =
     ALL_LINKS_ID === selectedFolderId
       ? ALL_LINKS_TEXT
       : folders?.find(({ id }) => id === selectedFolderId)?.name ?? "";
 
-  const getShareLink = () => `${window.location.origin}/shared?user=1&folder=${selectedFolderId}`;
+  const getShareLink = () =>
+    `${window.location.origin}/shared?user=1&folder=${selectedFolderId}`;
   const closeModal = () => setCurrentModal(null);
+  const closeInputModal = () => {
+    closeModal();
+    setInputValue("");
+  };
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Escape") {
       closeModal();
@@ -42,6 +63,37 @@ export const FolderToolBar = ({ folders, selectedFolderId }: FolderToolBarProps)
   const handleFacebookClick = () =>
     window?.open(`http://www.facebook.com/sharer.php?u=${getShareLink()}`);
   const handleLinkCopyClick = () => copyToClipboard(getShareLink());
+
+  const handleAddFolderClick = () => {
+    addFolder(inputValue, {
+      onSuccess: (data) => {
+        closeInputModal();
+        router.push(`${ROUTE.폴더}/${data?.data?.[0].id ?? ""}`);
+      },
+    });
+  };
+
+  const handleUpdateFolderClick = () => {
+    if (typeof selectedFolderId === "number") {
+      updateFolder(
+        { folderId: selectedFolderId, name: inputValue },
+        {
+          onSuccess: closeInputModal,
+        }
+      );
+    }
+  };
+
+  const handleDeleteFolderClick = () => {
+    if (typeof selectedFolderId === "number") {
+      deleteFolder(selectedFolderId, {
+        onSuccess: () => {
+          closeModal();
+          router.push(ROUTE.폴더);
+        },
+      });
+    }
+  };
 
   return (
     <div className={cx("container")}>
@@ -68,6 +120,7 @@ export const FolderToolBar = ({ folders, selectedFolderId }: FolderToolBarProps)
           title="폴더 추가"
           placeholder="내용 입력"
           buttonText="추가하기"
+          onClick={handleAddFolderClick}
           onCloseClick={closeModal}
           onKeyDown={handleKeyDown}
           value={inputValue}
@@ -99,6 +152,7 @@ export const FolderToolBar = ({ folders, selectedFolderId }: FolderToolBarProps)
             title="폴더 이름 변경"
             placeholder="내용 입력"
             buttonText="변경하기"
+            onClick={handleUpdateFolderClick}
             onCloseClick={closeModal}
             onKeyDown={handleKeyDown}
             value={inputValue}
@@ -111,7 +165,7 @@ export const FolderToolBar = ({ folders, selectedFolderId }: FolderToolBarProps)
             buttonText="삭제하기"
             onCloseClick={closeModal}
             onKeyDown={handleKeyDown}
-            onClick={() => {}}
+            onClick={handleDeleteFolderClick}
           />
         </div>
       )}
