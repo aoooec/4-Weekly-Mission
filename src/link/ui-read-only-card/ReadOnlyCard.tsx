@@ -25,7 +25,11 @@ export const ReadOnlyCard = ({
   const handleMouseLeave = () => setIsHovered(false);
 
   return (
-    <a href={url} target="_blank" rel="noopener noreferrer">
+    <a
+      href={`${url.startsWith("https://") ? url : "https://" + url}`}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       <Card onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>
         <CardImage imageSource={imageSource} alt={alt} isZoomedIn={isHovered} />
         <CardContent
