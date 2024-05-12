@@ -46,7 +46,7 @@ export const FolderToolBar = ({
       : folders?.find(({ id }) => id === currentFolderId)?.name ?? "";
 
   const getShareLink = () =>
-    `${window.location.origin}/shared?user=1&folder=${currentFolderId}`;
+    `${window.location.origin}/shared/${currentFolderId}`;
   const closeModal = () => setCurrentModal(null);
   const closeInputModal = () => {
     closeModal();
