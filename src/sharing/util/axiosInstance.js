@@ -1,7 +1,11 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-  baseURL: "https://bootcamp-api.codeit.kr/api/",
+  baseURL: "https://bootcamp-api.codeit.kr/api/linkbrary/v1",
+  headers: {
+    "Content-Type": "application/json",
+    accept: "*",
+  },
 });
 
 axiosInstance.interceptors.request.use((config) => {
