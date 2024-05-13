@@ -1,0 +1,29 @@
+@import "@/styles/_variables.scss";
+@import "@/styles/_mixins.scss";
+
+.container {
+  padding: 6px 10px;
+  @include border($primary, 1px, 5px);
+
+  @include tablet {
+    padding: 8px 12px;
+  }
+
+  .text {
+    font-size: $font-14;
+    line-height: 1.2;
+    color: $real-black;
+
+    @include tablet {
+      font-size: $font-16;
+    }
+  }
+
+  &.selected {
+    background-color: $primary;
+
+    .text {
+      color: $white;
+    }
+  }
+}

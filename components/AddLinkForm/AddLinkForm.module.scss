@@ -1,0 +1,65 @@
+@import "@/styles/_variables.scss";
+@import "@/styles/_mixins.scss";
+
+.container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background-color: $bg;
+  padding: 24px 32px 40px;
+
+  @include tablet {
+    padding: 60px 32px 90px;
+  }
+
+  .linkForm {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    @include border($primary, 1px, 15px);
+    background-color: $white;
+    padding: 8px 15px;
+
+    @include tablet {
+      max-width: 800px;
+      padding: 16px 20px;
+      gap: 12px;
+    }
+
+    svg {
+      width: 15px;
+      height: 15px;
+
+      @include tablet {
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    .input {
+      flex-grow: 1;
+      font-size: $font-14;
+      line-height: 1;
+      color: $real-black;
+
+      &::placeholder {
+        color: $gray-60;
+      }
+
+      @include tablet {
+        font-size: $font-16;
+        line-height: 1;
+      }
+    }
+
+    .addLinkBtn {
+      width: 80px;
+      padding: 10px 16px;
+      font-size: $font-14;
+
+      @include tablet {
+      }
+    }
+  }
+}

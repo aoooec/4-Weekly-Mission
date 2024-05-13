@@ -1,40 +1,43 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 14주차 (미완성)
 
-## Getting Started
+진짜 아예 처음부터 다시 쓰고 있습니다.......!!!
+속도가 느린 점 죄송해요 🥲
 
-First, run the development server:
+### 시도해보는 부분
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+##### Context 훅을 생성해서 로직 관리
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+아직 로직을 쓰지는 않았어요...!!!!
+멘토님이 알려주신 방법대로 해보려고 고민중입니다...
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+##### 공통 데이터 리퀘스트 훅 생성
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+이것저것 참고해서 새로 다시 만들어봤는데 error를 response status code에 따라서 핸들링하게 될 경우를 아직 잘 모르겠습니다.
+전반적으로 그냥 error 핸들링이 어렵긴 한데요 ㅠㅠ..
+error를 따로 state로 관리하지 않고 이렇게 관리할 경우에 status code를 별도로 state 관리하는게 좀 이상한 것 같기도 하고.......
+근데 이거 작성하다보니까 드는 생각인데데 setResponse에 err를 넣고 status code는 그냥 삭제해도 되겠군요......
+하지만 일단 이상한 상태 그대로 올려두긴 할게요..!! (왜 이런 생각을 했는지 코드를 보셔야 아실것같기도 해서ㅠㅠ)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+##### Typescript 적용
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+익숙하지 않아서 작성하는데 시간이 엄청 오래 걸리네요 ㅠㅠ!!
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+### 사용 고려중인 부분
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+##### React Hook Form 라이브러리
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+폴더 페이지도 아직 10%도 못한 것 같긴 하지만!!
+Form 관련해서 React Hook Form 라이브러리를 사용하면 모든 input value를 state로 하나하나 관리할 필요가 없다고 해서 한 번 사용해보고 싶어졌어요!! (나중에 로그인/회원가입 페이지 부분 Form에서 사용해보고 싶어서요)
+물론 기본 React로 제가 먼저 한땀한땀 구현해보고나서 그 다음에 사용을 하는게 좋을 것 같아서 먼저 제가 구현은 해보려구요!!
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 아직 고려하지 않은 부분
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+##### Next.js로 이전
+
+Next.js 템플릿으로 변경되긴 했지만 기본 React에서 데이터를 다루던 것과 다르지 않게 작성중입니다..!
+적용한건 페이지 라우터랑 로고에 Image 컴포넌트 사용 정도입니다!
+리액트가 너무 어려워서 일단 기본 리액트 방식대로 먼저 완성해보고 싶습니다!

@@ -1,0 +1,39 @@
+@import "@/styles/_variables.scss";
+
+@mixin font($size: 1rem, $weight: $regular) {
+  font: {
+    size: $size;
+    weight: $weight;
+  }
+}
+
+/* border */
+@mixin border($color, $stroke, $radius) {
+  border: $stroke solid $color;
+  border-radius: $radius;
+}
+
+/* interactive */
+@mixin mobile {
+  @media (max-width: #{$breakpoint-tablet} ) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$breakpoint-tablet}) {
+    @content;
+  }
+}
+
+@mixin tabletToDesktop {
+  @media (min-width: #{$breakpoint-tablet}) and (max-width: #{$breakpoint-desktop}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$breakpoint-desktop}) {
+    @content;
+  }
+}

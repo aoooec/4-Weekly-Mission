@@ -1,0 +1,23 @@
+@import "@/styles/_variables.scss";
+@import "@/styles/_mixins.scss";
+
+.input {
+  flex-grow: 1;
+  @include border($gray-20, 1px, 8px);
+  padding: 18px 15px;
+  font-size: $font-16;
+  color: $gray-100;
+
+  &::placeholder {
+    color: $gray-60;
+    font-size: $font-16;
+  }
+
+  &:focus {
+    border-color: $primary;
+  }
+
+  &.invalid {
+    border-color: $red;
+  }
+}
